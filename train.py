@@ -83,7 +83,7 @@ class VGGFace(nn.Module):
 if __name__ == '__main__':
 
     '''定义超参数'''
-    batch_size = 64  # 批的大小
+    batch_size = 32  # 批的大小
     num_epoches = 10  # 遍历训练集的次数
 
     dataset = dataset.ImageFolder(
@@ -93,7 +93,7 @@ if __name__ == '__main__':
             transforms.CenterCrop(224),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)), ]))
-    dataloader = torch.utils.data.DataLoader(dataset, batch_size=64, shuffle=True) # 测试集不需要打乱
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True) # 测试集不需要打乱
 
     '''创建model实例对象，并检测是否支持使用GPU'''
     model = VGGFace()  # 先实例化模型
