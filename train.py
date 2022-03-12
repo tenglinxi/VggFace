@@ -63,7 +63,7 @@ class VGGFace(nn.Module):
                 'fc7': nn.Linear(in_features=4096, out_features=4096),
                 'fc7-relu': nn.ReLU(inplace=True),
                 'fc7-dropout': nn.Dropout(p=0.5),
-                'fc8': nn.Linear(in_features=4096, out_features=2622),
+                'fc8': nn.Linear(in_features=4096, out_features=5737),
             }))
 
     def forward(self, x):
@@ -83,7 +83,7 @@ class VGGFace(nn.Module):
 if __name__ == '__main__':
 
     '''定义超参数'''
-    batch_size = 128  # 批的大小
+    batch_size = 64  # 批的大小
     num_epoches = 10  # 遍历训练集的次数
 
     dataset = dataset.ImageFolder(
@@ -99,13 +99,7 @@ if __name__ == '__main__':
     model = VGGFace()  # 先实例化模型
     summary(model, input_size=(3, 224, 224), batch_size=batch_size, device='cpu')  # 打印模型结构
 
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0, 1'  # 仅让id=0和1的GPU可被使用(也可以不写)
-
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # if torch.cuda.device_count() > 1:  # 有多块GPU供使用
-    #     print("GPU共有 %d 块" % torch.cuda.device_count())
-    #     model = nn.DataParallel(model, device_ids=[0, 1])  # device_ids不指定的话，默认启用所有(指定)可用的GPU
-
     model = model.to(device)
 
     '''定义 loss 和 optimizer '''
@@ -143,7 +137,7 @@ if __name__ == '__main__':
             # print('==> epoch={}, running_loss={}, num_correct={}'.format(i+1, running_loss, num_correct))
 
         print(
-            'Train==> Finish {} epoch, Loss: {:.6f}, Acc: {:.6f}'.format(epoch + 1, running_loss / (len(dataloader)), num_correct / (len(train_dataset))))
+            'Train==> Finish {} epoch, Loss: {:.6f}, Acc: {:.6f}'.format(epoch + 1, running_loss / (len(dataloader)), num_correct / (len(dataloader))))
 
         # 测试 评估 模型
         model.eval()  # 模型进入测试阶段，参数不再更改
